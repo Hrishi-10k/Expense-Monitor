@@ -1,0 +1,67 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+
+<h2>
+    <i class="bi bi-bar-chart"></i>
+    Budget Report
+    <small class="text-muted fs-6">&mdash; {{ month_label }}</small>
+</h2>
+
+<hr>
+
+<div class="table-responsive">
+<table class="table table-bordered table-hover shadow">
+
+    <thead>
+        <tr class="table-dark text-center">
+            <th>Category</th>
+            <th>Budget</th>
+            <th>Spent</th>
+            <th>Used</th>
+            <th>Remaining</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for item in report %}
+        <tr class="text-center">
+            <td><span class="badge text-bg-primary">{{ item.category }}</span></td>
+            <td><strong>₹{{ item.budget }}</strong></td>
+            <td>₹{{ item.spent }}</td>
+            <td style="min-width: 140px;">
+                <div class="progress" role="progressbar">
+                    <div class="progress-bar {% if item.percent > 100 %}bg-danger{% elif item.percent >= 80 %}bg-warning{% else %}bg-success{% endif %}"
+                         style="width: {{ item.bar_percent }}%">{{ item.percent }}%</div>
+                </div>
+            </td>
+            <td>
+                {% if item.remaining >= 0 %}
+                    <span class="text-success">₹{{ item.remaining }}</span>
+                {% else %}
+                    <span class="text-danger">₹{{ item.remaining }}</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if item.remaining >= 0 %}
+                    <span class="badge text-bg-success"><i class="bi bi-check-circle"></i> Within Budget</span>
+                {% else %}
+                    <span class="badge text-bg-danger"><i class="bi bi-exclamation-circle"></i> Budget Exceeded</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center text-muted">
+                <i class="bi bi-info-circle"></i>
+                No budget report data available.
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+
+</table>
+</div>
+
+{% endblock %}

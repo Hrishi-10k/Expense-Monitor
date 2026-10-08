@@ -1,0 +1,97 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'expenses/css/style.css' %}">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}">
+                Expense Tracker
+            </a>
+
+            {% if user.is_authenticated %}
+            <span class="text-white">Welcome, {{ user.username }}</span>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            {% if user.is_authenticated %}
+            <!-- Sidebar (only for logged-in users) -->
+            <div class="col-md-2 bg-light min-vh-100">
+                <ul class="nav flex-column mt-3">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_expense' %}"><i class="bi bi-plus-circle"></i> Add Expense</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_expenses' %}"><i class="bi bi-table"></i> View Expenses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_categories' %}"><i class="bi bi-folder"></i> Categories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_budget' %}"><i class="bi bi-wallet2"></i> Add Budget</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_budgets' %}"><i class="bi bi-cash-stack"></i> View Budgets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'budget_report' %}"><i class="bi bi-bar-chart"></i> Budget Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'export_pdf' %}"><i class="bi bi-file-earmark-pdf"></i> Export PDF</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'export_excel' %}"><i class="bi bi-file-earmark-excel"></i> Export Excel</a>
+                    </li>
+                    <li class="nav-item mt-2">
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-light">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-md-10 mt-3">
+            {% else %}
+            <div class="col-12 mt-4">
+            {% endif %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+
+            </div>
+
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

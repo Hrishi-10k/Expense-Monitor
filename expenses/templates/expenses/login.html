@@ -1,0 +1,81 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-md-7 col-lg-6">
+    <div class="card shadow">
+        <div class="card-body p-4">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Login
+            </h2>
+            {% if error %}
+            <div class="alert alert-danger">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ error }}
+            </div>
+            {% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <div class="mb-3">
+                    <label class="form-label">
+                        Username
+                    </label>
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        placeholder="Enter username"
+                        required
+                    >
+                </div>
+                <div class="mb-3">
+                   <label class="form-label">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Enter password"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary w-100"
+                >
+
+                    <i class="bi bi-box-arrow-in-right"></i>
+
+                    Login
+
+                </button>
+
+            </form>
+
+            <p class="text-center mt-3 mb-0">
+
+                Don't have an account?
+
+                <a href="{% url 'register' %}">
+
+                    Register
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

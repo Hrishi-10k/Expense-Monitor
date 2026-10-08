@@ -1,0 +1,117 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+
+<div class="col-md-7 col-lg-6">
+
+    <div class="card shadow">
+
+        <div class="card-body p-4">
+
+            <h2 class="text-center mb-4">
+
+                <i class="bi bi-person-plus"></i>
+
+                Create Account
+
+            </h2>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Username
+
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        value="{{ form_data.username }}"
+                        class="form-control"
+                        placeholder="Enter username"
+                        required
+                    >
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Email
+
+                    </label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        value="{{ form_data.email }}"
+                        class="form-control"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Enter password"
+                        minlength="8"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success w-100"
+                >
+
+                    <i class="bi bi-person-check"></i>
+
+                    Register
+
+                </button>
+
+            </form>
+
+            <p class="text-center mt-3 mb-0">
+
+                Already have an account?
+
+                <a href="{% url 'login' %}">
+
+                    Login
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+body {
+background: #f5f5f5;
+font-family: 'Poppins', sans-serif;
+}
+
+.nav-link {
+color: black;
+border-radius: 6px;
+margin-bottom: 5px;
+transition: 0.3s;
+}
+
+.nav-link:hover {
+background: #0d6efd;
+color: white;
+}
+
+.card {
+transition: 0.3s;
+}
+
+.card:hover {
+transform: translateY(-5px);
+}

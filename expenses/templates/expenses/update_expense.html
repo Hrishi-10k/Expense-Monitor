@@ -1,0 +1,129 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+
+<h2>
+    <i class="bi bi-pencil-square"></i>
+    Update Expense
+</h2>
+
+<hr>
+
+<div class="card shadow">
+
+
+<div class="card-body">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Category
+            </label>
+
+            <select
+                name="category"
+                class="form-select"
+                required
+            >
+
+                {% for category in categories %}
+
+                <option
+                    value="{{ category.id }}"
+
+                    {% if category.id == expense.category.id %}
+                        selected
+                    {% endif %}
+                >
+
+                    {{ category.name }}
+
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Amount
+            </label>
+
+            <input
+                type="number"
+                name="amount"
+                value="{{ expense.amount }}"
+                class="form-control"
+                min="0.01"
+                step="0.01"
+                required
+            >
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Description
+            </label>
+
+            <textarea
+                name="description"
+                class="form-control"
+                rows="4"
+                required
+            >{{ expense.description }}</textarea>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Expense Date
+            </label>
+
+            <input
+                type="date"
+                name="expense_date"
+                value="{{ expense.expense_date|date:'Y-m-d' }}"
+                class="form-control"
+                required
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-warning"
+        >
+
+            <i class="bi bi-pencil-square"></i>
+            Update Expense
+
+        </button>
+
+        <a
+            href="{% url 'view_expenses' %}"
+            class="btn btn-secondary"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+            Cancel
+
+        </a>
+
+    </form>
+
+</div>
+
+
+</div>
+
+{% endblock %}

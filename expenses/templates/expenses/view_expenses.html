@@ -1,0 +1,102 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<h2>View Expenses</h2>
+
+<form method="GET" class="row g-2 align-items-center mb-3">
+
+    <div class="col-auto">
+        <input type="text" name="search" class="form-control form-control-sm"
+               placeholder="Search Description" value="{{ filters.search }}">
+    </div>
+
+    <div class="col-auto">
+        <select name="category" class="form-select form-select-sm">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+            <option value="{{ category.id }}" {% if filters.category == category.id %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="col-auto">
+        <input type="date" name="date" class="form-control form-control-sm" value="{{ filters.date }}">
+    </div>
+
+    <div class="col-auto">
+        <select name="sort" class="form-select form-select-sm">
+            <option value="">Sort Amount</option>
+            <option value="low" {% if filters.sort == 'low' %}selected{% endif %}>Low to High</option>
+            <option value="high" {% if filters.sort == 'high' %}selected{% endif %}>High to Low</option>
+        </select>
+    </div>
+
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+        <a href="{% url 'view_expenses' %}" class="btn btn-outline-secondary btn-sm">Reset</a>
+    </div>
+
+</form>
+
+<h2>All Expenses</h2>
+
+<div class="table-responsive">
+<table class="table table-bordered table-hover">
+
+    <tr>
+        <th>S.No</th>
+        <th>Category</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Date</th>
+        <th>Action</th>
+    </tr>
+
+    {% for expense in page_obj %}
+    <tr>
+        <td>{{ page_obj.start_index|add:forloop.counter0 }}</td>
+        <td>{{ expense.category }}</td>
+        <td>₹ {{ expense.amount }}</td>
+        <td>{{ expense.description }}</td>
+        <td>{{ expense.expense_date }}</td>
+        <td>
+            <a href="{% url 'update_expense' expense.id %}" class="btn btn-warning btn-sm">Edit</a>
+            <form method="post" action="{% url 'delete_expense' expense.id %}" class="d-inline"
+                  onsubmit="return confirm('Are you sure you want to delete this expense?')">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6" class="text-center">No Expenses Found</td>
+    </tr>
+    {% endfor %}
+
+</table>
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav aria-label="Expense pages">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        <li class="page-item disabled">
+            <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        </li>
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

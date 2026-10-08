@@ -1,0 +1,65 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+
+<h2>
+    <i class="bi bi-pencil-square"></i>
+    Edit Category
+</h2>
+
+<hr>
+
+<div class="card shadow">
+
+
+<div class="card-body">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Category Name
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                class="form-control"
+                value="{{ category.name }}"
+                placeholder="Enter category name"
+                required
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-warning"
+        >
+
+            <i class="bi bi-check-circle"></i>
+            Update Category
+
+        </button>
+
+        <a
+            href="{% url 'view_categories' %}"
+            class="btn btn-secondary"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+            Cancel
+
+        </a>
+
+    </form>
+
+</div>
+
+
+</div>
+
+{% endblock %}

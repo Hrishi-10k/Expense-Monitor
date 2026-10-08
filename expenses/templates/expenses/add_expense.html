@@ -1,0 +1,125 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+
+<h2>
+    <i class="bi bi-plus-circle"></i>
+    Add Expense
+</h2>
+
+<hr>
+
+<div class="card shadow">
+
+
+<div class="card-body">
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Category
+            </label>
+
+            <select
+                name="category"
+                class="form-select"
+                required
+            >
+
+                <option value="">
+                    Select Category
+                </option>
+
+                {% for category in categories %}
+
+                <option value="{{ category.id }}">
+                    {{ category.name }}
+                </option>
+
+                {% endfor %}
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Amount
+            </label>
+
+            <input
+                type="number"
+                name="amount"
+                class="form-control"
+                min="0.01"
+                step="0.01"
+                placeholder="Enter expense amount"
+                required
+            >
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Description
+            </label>
+
+            <textarea
+                name="description"
+                class="form-control"
+                rows="4"
+                placeholder="Enter expense description"
+                required
+            ></textarea>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label class="form-label">
+                Expense Date
+            </label>
+
+            <input
+                type="date"
+                name="expense_date"
+                class="form-control"
+                required
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-success"
+        >
+
+            <i class="bi bi-check-circle"></i>
+            Save Expense
+
+        </button>
+
+        <a
+            href="{% url 'view_expenses' %}"
+            class="btn btn-secondary"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+            Cancel
+
+        </a>
+
+    </form>
+
+</div>
+
+
+</div>
+
+{% endblock %}

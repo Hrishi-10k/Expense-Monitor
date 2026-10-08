@@ -1,0 +1,397 @@
+
+{% extends 'expenses/base.html' %}
+{% block content %}
+<h2>Dashboard</h2>
+<hr>
+<div class="row">
+
+    <div class="col-md-4">
+
+        <div class="card text-bg-primary mb-3">
+
+            <div class="card-body">
+
+                <h5><i class="bi bi-folder-fill"></i> Total Categories</h5>
+
+                <h2>{{ total_categories }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card text-bg-success mb-3">
+
+            <div class="card-body">
+
+               <h5><i class="bi bi-cash-stack"></i> Total Expenses</h5>
+
+                <h2>{{ total_expenses }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card text-bg-warning mb-3">
+
+            <div class="card-body">
+
+                <h5><i class="bi bi-wallet2"></i> Total Budgets</h5>
+
+                <h2>{{ total_budgets }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div class="col-md-4">
+
+        <div class="card text-bg-info mb-3">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-cash-stack"></i>
+                    Total Amount
+                </h5>
+
+                <h2>₹{{ total_amount }}</h2>
+
+            </div>
+
+        </div>
+
+    </div> 
+    <div class="col-md-4">
+
+        <div class="card text-bg-danger mb-3">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-trophy-fill"></i>
+                    Top Spending Category
+                </h5>
+
+                {% if top_category %}
+
+                    <h3>
+                        {{ top_category.category__name }}
+                    </h3>
+
+                    <h5>
+                        ₹{{ top_category.total_spent }}
+                    </h5>
+
+                {% else %}
+
+                    <p>No expenses available.</p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-4">
+
+    {% if budget_status == "Over Budget" %}
+
+        <div class="card text-bg-danger mb-3">
+
+        {% else %}
+
+        <div class="card text-bg-success mb-3">
+
+        {% endif %}
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-shield-check"></i>
+                    Budget Status
+                </h5>
+
+                <h3>{{ budget_status }}</h3>
+
+                <p class="mb-0">
+                    Monthly Budget: ₹{{ total_budget_amount }}
+                </p>
+                <p class="mb-0">
+                    Spent This Month: ₹{{ monthly_expense }}
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-4">
+
+        <div class="card text-bg-secondary mb-3">
+
+            <div class="card-body">
+
+                <h5>
+                    <i class="bi bi-calendar-month"></i>
+                    This Month's Expense
+                </h5>
+
+                <h2>₹{{ monthly_expense }}</h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<hr>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+
+<h2>
+    <i class="bi bi-clock-history"></i>
+    Recent Expenses
+</h2>
+
+<div>
+
+    <a href="{% url 'view_expenses' %}" class="btn btn-primary">
+        <i class="bi bi-list"></i>
+        View All
+    </a>
+
+    <a href="{% url 'add_expense' %}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i>
+        Add Expense
+    </a>
+
+</div>
+
+
+</div>
+
+<div class="table-responsive">
+
+
+<table class="table table-striped table-hover table-bordered shadow">
+
+    <thead>
+
+        <tr class="table-dark text-center">
+
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Date</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for expense in recent_expenses %}
+
+        <tr class="text-center">
+
+            <td>
+
+                <span class="badge text-bg-primary">
+
+                    {{ expense.category }}
+
+                </span>
+
+            </td>
+
+            <td>
+
+                <strong>
+
+                    ₹{{ expense.amount }}
+
+                </strong>
+
+            </td>
+
+            <td>
+
+                {{ expense.description }}
+
+            </td>
+
+            <td>
+
+                {{ expense.expense_date }}
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="4" class="text-center text-muted">
+
+                <i class="bi bi-info-circle"></i>
+
+                No expenses found.
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+</div>
+<hr>
+
+<div class="row">
+
+
+<div class="col-md-7 mb-4">
+
+    <div class="card shadow h-100">
+
+        <div class="card-body">
+
+            <h4 class="text-center">
+                <i class="bi bi-bar-chart-fill"></i>
+                Expense Chart
+            </h4>
+
+            <div style="height: 350px;">
+
+                <canvas id="expenseChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="col-md-5 mb-4">
+
+    <div class="card shadow h-100">
+
+        <div class="card-body">
+
+            <h4 class="text-center">
+                <i class="bi bi-pie-chart-fill"></i>
+                Expense Distribution
+            </h4>
+
+            <div style="height: 350px;">
+
+                <canvas id="pieChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</div>
+
+{{ chart_labels|json_script:"chart-labels" }}
+{{ chart_data|json_script:"chart-data" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+
+<script>
+const labels = JSON.parse(document.getElementById("chart-labels").textContent);
+const data = JSON.parse(document.getElementById("chart-data").textContent);
+
+const ctx = document.getElementById("expenseChart");
+
+new Chart(ctx, {
+    type: "bar",
+
+    data: {
+        labels: labels,
+        datasets: [{
+            label: "Expenses",
+            data: data,
+            borderRadius: 10
+        }]
+    },
+
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+        animation: {
+            duration: 1500
+        },
+
+        plugins: {
+            title: {
+                display: true,
+                text: "Expenses by Category"
+            }
+        }
+    }
+});
+</script>
+
+<script>
+
+const pieCtx = document.getElementById("pieChart");
+
+new Chart(pieCtx, {
+
+    type: "pie",
+
+    data: {
+
+        labels: labels,
+
+        datasets: [{
+            data: data
+        }]
+    },
+
+options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+        animation: {
+            duration: 1500
+        },
+
+        plugins: {
+            title: {
+                display: true,
+                text: "Expense Distribution"
+            }
+        }
+    }
+
+});
+
+</script>
+
+{% endblock %}
