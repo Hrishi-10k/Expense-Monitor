@@ -1,4 +1,4 @@
-# 💰 Smart Expense Tracker
+# 💰 Expense Monitor
 
 A full-stack **expense management web application** built with **Python, Django, and MySQL** that helps users manage their daily expenses, organize spending into categories, set monthly budgets, analyze spending patterns, and export expense reports.
 
