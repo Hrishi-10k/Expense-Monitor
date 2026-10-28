@@ -1,20 +1,22 @@
-# Python cache files
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Python
 __pycache__/
 *.py[cod]
+*.pyc
 
-# Virtual environment
+# Virtual environments
 venv/
-env/
 .venv/
+env/
 
-# Django / local data
-*.log
+# Local database and uploaded data
 db.sqlite3
+media/
 
-# Environment variables / secrets
-.env
-
-# Editors / OS
+# Development files
 .vscode/
 .idea/
-.DS_Store
